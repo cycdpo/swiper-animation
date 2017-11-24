@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Swiper Animation Demo</title><base href="./"><link href="//cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet"><style>* {
+  margin: 0;
+  padding: 0;
+}
+
+.swiper-container {
+  width: 400px;
+  height: 300px;
+  background-color: #fff1c9;
+}
+
+.demo {
+  width: 400px;
+  height: 300px;
+  line-height: 300px;
+  text-align: center;
+}</style></head><body><div class="swiper-container"><div class="swiper-wrapper"><div class="swiper-slide"><div class="demo" data-swiper-animation="fadeIn">Slider1</div></div><div class="swiper-slide"><div class="demo" data-swiper-animation="fadeIn" data-duration=".5s" data-delay=".5s">Slider2</div></div><div class="swiper-slide"><div class="demo" data-swiper-animation="fadeIn" data-duration=".5s" data-delay=".5s">Slider3</div></div></div></div><script src="SwiperAnimation.js"></script><link href="//cdn.bootcss.com/Swiper/4.0.6/css/swiper.min.css" rel="stylesheet"><script src="//cdn.bootcss.com/Swiper/4.0.6/js/swiper.min.js"></script><script>var mySwiper = new Swiper('.swiper-container', {
+  on: {
+    init: function () {
+      new SwiperAnimation(this).animate();
+    },
+    slideChange: function () {
+      new SwiperAnimation(this).animate();
+    }
+  }
+});
+
+console.log(mySwiper);</script></body></html>
