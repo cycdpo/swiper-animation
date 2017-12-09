@@ -14,13 +14,18 @@
   height: 300px;
   line-height: 300px;
   text-align: center;
-}</style></head><body><div class="swiper-container"><div class="swiper-wrapper"><div class="swiper-slide"><div class="demo" data-swiper-animation="fadeIn">Slider1</div></div><div class="swiper-slide"><div class="demo" data-swiper-animation="fadeIn" data-duration=".5s" data-delay=".5s">Slider2</div></div><div class="swiper-slide"><div class="demo" data-swiper-animation="fadeIn" data-duration=".5s" data-delay=".5s">Slider3</div></div></div></div><script src="SwiperAnimation.js"></script><link href="//cdn.bootcss.com/Swiper/4.0.6/css/swiper.min.css" rel="stylesheet"><script src="//cdn.bootcss.com/Swiper/4.0.6/js/swiper.min.js"></script><script>var mySwiper = new Swiper('.swiper-container', {
+}</style></head><body><div class="swiper-container"><div class="swiper-wrapper"><div class="swiper-slide" data-hash="slide0"><div class="demo" data-swiper-animation="fadeIn">Slider1</div></div><div class="swiper-slide" data-hash="slide1"><div class="demo" data-swiper-animation="fadeIn" data-duration=".5s" data-delay=".5s">Slider2</div></div><div class="swiper-slide" data-hash="slide2"><div class="demo" data-swiper-animation="fadeIn" data-duration=".5s" data-delay=".5s">Slider3</div></div></div></div><script src="SwiperAnimation.js"></script><link href="//cdn.bootcss.com/Swiper/4.0.7/css/swiper.min.css" rel="stylesheet"><script src="//cdn.bootcss.com/Swiper/4.0.7/js/swiper.min.js"></script><script>var swiperAnimation = new SwiperAnimation();
+var mySwiper = new Swiper('.swiper-container', {
+  //    hashNavigation: {
+  //      watchState: true,
+  //      replaceState: true
+  //    },
   on: {
     init: function () {
-      new SwiperAnimation(this).animate();
+      swiperAnimation.init(this).animate();
     },
     slideChange: function () {
-      new SwiperAnimation(this).animate();
+      swiperAnimation.init(this).animate();
     }
   }
 });

@@ -7,7 +7,7 @@
 		exports["SwiperAnimation"] = factory();
 	else
 		root["SwiperAnimation"] = factory();
-})(this, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -79,28 +79,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_awesome_js_funcs_designPattern_CreateInstance__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_awesome_js_funcs_typeConversion_nodeListToArray__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_awesome_js_funcs_typeConversion_nodeListToArray__ = __webpack_require__(1);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
-
-var _instance = new __WEBPACK_IMPORTED_MODULE_0_awesome_js_funcs_designPattern_CreateInstance__["a" /* default */](),
-    sHidden = 'visibility: hidden;';
+var sHidden = 'visibility: hidden;';
 
 var SwiperAnimation = function () {
-  function SwiperAnimation(swiper) {
+  function SwiperAnimation() {
     _classCallCheck(this, SwiperAnimation);
 
-    if (_instance()) {
-      return _instance();
-    }
-    this.swiper = swiper;
+    this.swiper = null;
     this.allBoxes = [];
-    _instance(this);
   }
 
+  SwiperAnimation.prototype.init = function init(swiper) {
+    if (!this.swiper) {
+      this.swiper = swiper;
+    }
+    return this;
+  };
+
+  /**
+   * run animations
+   * @return {Promise.<TResult>}
+   */
   SwiperAnimation.prototype.animate = function animate() {
     var _this = this;
 
@@ -109,7 +113,7 @@ var SwiperAnimation = function () {
     }).then(function () {
       return _this._clear();
     }).then(function () {
-      var activeBoxes = Object(__WEBPACK_IMPORTED_MODULE_1_awesome_js_funcs_typeConversion_nodeListToArray__["a" /* default */])(_this.swiper.slides[_this.swiper.realIndex].querySelectorAll('[data-swiper-animation]'));
+      var activeBoxes = Object(__WEBPACK_IMPORTED_MODULE_0_awesome_js_funcs_typeConversion_nodeListToArray__["a" /* default */])(_this.swiper.slides[_this.swiper.realIndex].querySelectorAll('[data-swiper-animation]'));
 
       var runAnimations = activeBoxes.map(function (el) {
         return new Promise(function (resolve) {
@@ -139,7 +143,7 @@ var SwiperAnimation = function () {
   };
 
   SwiperAnimation.prototype._clear = function _clear() {
-    return Promise.all(this.allBoxes.map(function (el) {
+    var _runClearTasks = this.allBoxes.map(function (el) {
       return new Promise(function (resolve) {
         if (el.isRecovery) {
           resolve();
@@ -161,9 +165,16 @@ var SwiperAnimation = function () {
           return resolve();
         }, 0);
       });
-    }));
+    });
+
+    return Promise.all(_runClearTasks);
   };
 
+  /**
+   * cache allBoxes style
+   * @return {*}
+   * @private
+   */
   SwiperAnimation.prototype._cache = function _cache() {
     var _this2 = this;
 
@@ -181,23 +192,31 @@ var SwiperAnimation = function () {
         return resolve();
       }, 0);
     }).then(function () {
-      return new Promise(function (resolve) {
-        _this2.allBoxes.forEach(function (el) {
+
+      var _runCacheTasks = _this2.allBoxes.map(function (el) {
+        return new Promise(function (resolve) {
           if (el.attributes['style']) {
             el.styleCache = sHidden + el.style.cssText;
           } else {
             el.styleCache = sHidden;
           }
+          el.style.cssText = el.styleCache;
           el.isRecovery = true; // add el property isRecovery
-        });
 
-        setTimeout(function () {
-          return resolve();
-        }, 0);
+          setTimeout(function () {
+            return resolve();
+          }, 0);
+        });
       });
+
+      return Promise.all(_runCacheTasks);
     });
   };
 
+  /**
+   * init this.allBoxes
+   * @private
+   */
   SwiperAnimation.prototype._initAllBoxes = function _initAllBoxes() {
     if (!this.allBoxes.length) {
       var swiperWrapper = null;
@@ -210,7 +229,7 @@ var SwiperAnimation = function () {
         swiperWrapper = this.swiper.wrapper[0];
       }
 
-      this.allBoxes = Object(__WEBPACK_IMPORTED_MODULE_1_awesome_js_funcs_typeConversion_nodeListToArray__["a" /* default */])(swiperWrapper.querySelectorAll('[data-swiper-animation]'));
+      this.allBoxes = Object(__WEBPACK_IMPORTED_MODULE_0_awesome_js_funcs_typeConversion_nodeListToArray__["a" /* default */])(swiperWrapper.querySelectorAll('[data-swiper-animation]'));
     }
   };
 
@@ -225,27 +244,7 @@ var SwiperAnimation = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/**
- * 单例模式构造函数(设计模式)
- * @returns {function(*=)}
- * @constructor
- */
-/* harmony default export */ __webpack_exports__["a"] = (function () {
-  var instance = void 0;
-  return function (newInstance) {
-    if (newInstance) {
-      instance = newInstance;
-    }
-    return instance;
-  };
-});
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__judgeBasic_isNodeList__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__judgeBasic_isNodeList__ = __webpack_require__(2);
 
 
 /**
@@ -267,7 +266,7 @@ var SwiperAnimation = function () {
 });
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
