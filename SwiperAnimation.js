@@ -7,7 +7,7 @@
 		exports["SwiperAnimation"] = factory();
 	else
 		root["SwiperAnimation"] = factory();
-})(typeof self !== 'undefined' ? self : this, function() {
+})(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -54,6 +54,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		}
 /******/ 	};
 /******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -69,22 +74,81 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.js");
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ "./node_modules/awesome-js-funcs/judgeBasic/isNodeList.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/awesome-js-funcs/judgeBasic/isNodeList.js ***!
+  \****************************************************************/
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_awesome_js_funcs_typeConversion_nodeListToArray__ = __webpack_require__(1);
+__webpack_require__.r(__webpack_exports__);
+/**
+ * 判断是否nodeList
+ * @param nodeList
+ */
+/* harmony default export */ __webpack_exports__["default"] = (function (nodeList) {
+  return Object.prototype.toString.call(nodeList) === '[object NodeList]';
+});
+
+/***/ }),
+
+/***/ "./node_modules/awesome-js-funcs/typeConversion/nodeListToArray.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/awesome-js-funcs/typeConversion/nodeListToArray.js ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _judgeBasic_isNodeList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../judgeBasic/isNodeList */ "./node_modules/awesome-js-funcs/judgeBasic/isNodeList.js");
+
+
+/**
+ * nodeList转变为数组
+ * @param nodeList
+ * @returns {Array}
+ */
+/* harmony default export */ __webpack_exports__["default"] = (function (nodeList) {
+
+  if (Array.isArray(nodeList)) {
+    return nodeList;
+  }
+
+  if (!Object(_judgeBasic_isNodeList__WEBPACK_IMPORTED_MODULE_0__["default"])(nodeList)) {
+    return new Array(nodeList);
+  }
+
+  return Array.from ? Array.from(nodeList) : Array.prototype.slice.call(nodeList);
+});
+
+/***/ }),
+
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! awesome-js-funcs/typeConversion/nodeListToArray */ "./node_modules/awesome-js-funcs/typeConversion/nodeListToArray.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
 var sHidden = 'visibility: hidden;';
+
+var PROMISE_POLYFILL_URL = 'https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js';
 
 var SwiperAnimation = function () {
   function SwiperAnimation() {
@@ -92,28 +156,49 @@ var SwiperAnimation = function () {
 
     this.swiper = null;
     this.allBoxes = [];
+
+    this.appendedPromise = false;
+    this.isPromiseReady = false;
   }
 
   SwiperAnimation.prototype.init = function init(swiper) {
+    var _this = this;
+
     if (!this.swiper) {
       this.swiper = swiper;
     }
+
+    if (this.isPromiseReady || window.Promise) {
+      this.isPromiseReady = true;
+      return this;
+    }
+
+    // fix "Promise Is Undefined" in IE
+    this._initPromisePolyfill(function () {
+      _this.isPromiseReady = true;
+    });
     return this;
   };
 
   /**
    * run animations
-   * @return {Promise.<TResult>}
+   * @return {*}
    */
   SwiperAnimation.prototype.animate = function animate() {
-    var _this = this;
+    var _this2 = this;
+
+    if (!this.isPromiseReady) {
+      return setTimeout(function () {
+        return _this2.animate();
+      }, 5e2);
+    }
 
     return Promise.resolve().then(function () {
-      return _this._cache();
+      return _this2._cache();
     }).then(function () {
-      return _this._clear();
+      return _this2._clear();
     }).then(function () {
-      var activeBoxes = Object(__WEBPACK_IMPORTED_MODULE_0_awesome_js_funcs_typeConversion_nodeListToArray__["a" /* default */])(_this.swiper.slides[_this.swiper.realIndex].querySelectorAll('[data-swiper-animation]'));
+      var activeBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.realIndex].querySelectorAll('[data-swiper-animation]'));
 
       var runAnimations = activeBoxes.map(function (el) {
         return new Promise(function (resolve) {
@@ -176,7 +261,7 @@ var SwiperAnimation = function () {
    * @private
    */
   SwiperAnimation.prototype._cache = function _cache() {
-    var _this2 = this;
+    var _this3 = this;
 
     // has cached
     if (this.allBoxes.length) {
@@ -187,13 +272,13 @@ var SwiperAnimation = function () {
 
     // start cache
     return new Promise(function (resolve) {
-      _this2._initAllBoxes();
+      _this3._initAllBoxes();
       setTimeout(function () {
         return resolve();
       }, 0);
     }).then(function () {
 
-      var _runCacheTasks = _this2.allBoxes.map(function (el) {
+      var _runCacheTasks = _this3.allBoxes.map(function (el) {
         return new Promise(function (resolve) {
           if (el.attributes['style']) {
             el.styleCache = sHidden + el.style.cssText;
@@ -229,8 +314,31 @@ var SwiperAnimation = function () {
         swiperWrapper = this.swiper.wrapper[0];
       }
 
-      this.allBoxes = Object(__WEBPACK_IMPORTED_MODULE_0_awesome_js_funcs_typeConversion_nodeListToArray__["a" /* default */])(swiperWrapper.querySelectorAll('[data-swiper-animation]'));
+      this.allBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(swiperWrapper.querySelectorAll('[data-swiper-animation]'));
     }
+  };
+
+  /**
+   * init PromisePolyfill
+   * @param callback
+   * @private
+   */
+  SwiperAnimation.prototype._initPromisePolyfill = function _initPromisePolyfill() {
+    var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+
+    // just add promise-polyfill script once
+    if (this.appendedPromise) {
+      return;
+    }
+
+    var oScript = document.createElement("script");
+    oScript.type = "text/javascript";
+    oScript.onload = function () {
+      return callback();
+    };
+    oScript.src = PROMISE_POLYFILL_URL;
+    document.querySelector('head').appendChild(oScript);
+    this.appendedPromise = true;
   };
 
   return SwiperAnimation;
@@ -239,46 +347,8 @@ var SwiperAnimation = function () {
 /* harmony default export */ __webpack_exports__["default"] = (SwiperAnimation);
 ;
 
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__judgeBasic_isNodeList__ = __webpack_require__(2);
-
-
-/**
- * nodeList转变为数组
- * @param nodeList
- * @returns {Array}
- */
-/* harmony default export */ __webpack_exports__["a"] = (function (nodeList) {
-
-  if (Array.isArray(nodeList)) {
-    return nodeList;
-  }
-
-  if (!Object(__WEBPACK_IMPORTED_MODULE_0__judgeBasic_isNodeList__["a" /* default */])(nodeList)) {
-    return new Array(nodeList);
-  }
-
-  return Array.from ? Array.from(nodeList) : Array.prototype.slice.call(nodeList);
-});
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/**
- * 判断是否nodeList
- * @param nodeList
- */
-/* harmony default export */ __webpack_exports__["a"] = (function (nodeList) {
-  return Object.prototype.toString.call(nodeList) === '[object NodeList]';
-});
-
 /***/ })
-/******/ ])["default"];
+
+/******/ })["default"];
 });
 //# sourceMappingURL=SwiperAnimation.js.map
