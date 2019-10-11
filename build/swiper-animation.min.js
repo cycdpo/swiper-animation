@@ -1,5 +1,5 @@
 /*!
- * swiper-animation v2.0.1
+ * swiper-animation v2.0.2
  * Homepage: https://github.com/cycdpo/swiper-animation#readme
  * Released under the MIT License.
  */

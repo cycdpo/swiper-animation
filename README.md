@@ -1,7 +1,6 @@
 # Swiper Animation
 
 [![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
 [![David deps][david-image]][david-url]
 [![devDependencies Status][david-dev-image]][david-dev-url]
 [![npm download][download-image]][download-url]
@@ -10,8 +9,6 @@
 
 [npm-image]: https://img.shields.io/npm/v/swiper-animation.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/swiper-animation
-[travis-image]: https://img.shields.io/travis/cycdpo/swiper-animation.svg?style=flat-square
-[travis-url]: https://travis-ci.org/cycdpo/swiper-animation
 [david-image]: https://img.shields.io/david/cycdpo/swiper-animation.svg?style=flat-square
 [david-url]: https://david-dm.org/cycdpo/swiper-animation
 [david-dev-image]: https://david-dm.org/cycdpo/swiper-animation/dev-status.svg?style=flat-square
@@ -23,6 +20,11 @@
 [license-image]: https://img.shields.io/npm/l/swiper-animation.svg?style=flat-square
 
 ([Releases](https://github.com/cycdpo/swiper-animation/releases) | [Demo](https://cycdpo.github.io/swiper-animation/))
+
+## This package has been deprecated
+[new-url]: https://github.com/cycjimmy/swiper-animation
+
+**This package has been migrated to [@cycjimmy/swiper-animation][new-url] for scoped NPM package. Please switch to [@cycjimmy/swiper-animation][new-url] to stay up to date.**
 
 ## Install
 ```shell
